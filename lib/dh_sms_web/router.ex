@@ -12,12 +12,17 @@ defmodule DhSmsWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+
+    post "/patients/bulk", DhSmsWeb.ApiPatientController, :bulk_create
   end
 
   scope "/", DhSmsWeb do
     pipe_through :browser
 
+    resources "/patients", PatientController
+
     live "/", PageLive, :index
+
   end
 
   # Other scopes may use custom stacks.

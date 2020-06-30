@@ -1,0 +1,5 @@
+{"patients": [
+  {"email": "eliot@eliotpiering.com", "name": "Eliot Piering", "phone": "617-943-5514"},
+  {"email": "eliot.piering@dispatchhealth.com", "name": "Alternate Eliot", "phone": "617-943-5514"},
+  {"email": "fake_email4", "name": "Yet Another Eliot", "phone": "617-943-5514"}
+]}
