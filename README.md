@@ -13,5 +13,5 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 ### Bulk Load Patients
 
 ```
-curl -d "@patients.json" -X POST http://localhost:4000/patients/bulk
+curl -d "@patients.json" -X POST -H "Content-Type: application/json" http://localhost:4000/patients/bulk
 ```

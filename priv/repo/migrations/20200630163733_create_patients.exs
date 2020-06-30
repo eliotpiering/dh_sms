@@ -11,6 +11,5 @@ defmodule DhSms.Repo.Migrations.CreatePatients do
     end
 
     create unique_index(:patients, [:email])
-    create unique_index(:patients, [:phone])
   end
 end

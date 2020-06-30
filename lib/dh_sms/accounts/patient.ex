@@ -17,4 +17,11 @@ defmodule DhSms.Accounts.Patient do
     |> validate_required([:name, :email, :phone])
     |> unique_constraint(:email)
   end
+
+  def with_timestamps(patient) do
+    timestamps = %{created_at: DateTime.utc_now(), updated_at: DateTime.utc_now()}
+
+    patient
+    |> cast(timestamps, [:inserted_at, :updated_at])
+  end
 end

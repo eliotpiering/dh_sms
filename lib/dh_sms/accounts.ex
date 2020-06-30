@@ -57,10 +57,15 @@ defmodule DhSms.Accounts do
 
   def create_patients(patients \\ []) do
     patients
-    |> Enum.map(fn attrs ->
-      %Patient{} |> Patient.changeset(attrs)
+    |> Enum.reduce(%{success: [], fail: []}, fn attrs, acc ->
+      case create_patient(attrs) do
+        {:ok, patient} ->
+          %{acc | success: [patient | acc.success]}
+
+        {:error, %Ecto.Changeset{} = changeset} ->
+          %{acc | fail: [changeset | acc.fail]}
+      end
     end)
-    |> Repo.insert_all()
   end
 
   @doc """
