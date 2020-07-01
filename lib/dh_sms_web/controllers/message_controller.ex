@@ -22,7 +22,7 @@ defmodule DhSmsWeb.MessageController do
         |> redirect(to: Routes.contact_message_path(conn, :show, contact_id, message))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        render(conn, "new.html", contact_id: contact_id, changeset: changeset)
     end
   end
 

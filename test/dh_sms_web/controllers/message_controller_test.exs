@@ -19,6 +19,8 @@ defmodule DhSmsWeb.MessageControllerTest do
   end
 
   describe "index" do
+    setup [:create_contact]
+
     test "lists all messages", %{conn: conn, contact: contact} do
       conn = get(conn, Routes.contact_message_path(conn, :index, contact.id))
       assert html_response(conn, 200) =~ "Listing Messages"
@@ -26,6 +28,8 @@ defmodule DhSmsWeb.MessageControllerTest do
   end
 
   describe "new message" do
+    setup [:create_contact]
+
     test "renders form", %{conn: conn, contact: contact} do
       conn = get(conn, Routes.contact_message_path(conn, :new, contact.id))
       assert html_response(conn, 200) =~ "New Message"
@@ -33,8 +37,11 @@ defmodule DhSmsWeb.MessageControllerTest do
   end
 
   describe "create message" do
+    setup [:create_contact]
+
     test "redirects to show when data is valid", %{conn: conn, contact: contact} do
-      conn = post(conn, Routes.contact_message_path(conn, :create, contact.id), message: @create_attrs)
+      create_attrs = Map.put(@create_attrs, :contact_id, contact.id)
+      conn = post(conn, Routes.contact_message_path(conn, :create, contact.id), message: create_attrs)
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == Routes.contact_message_path(conn, :show, contact.id, id)
@@ -85,6 +92,12 @@ defmodule DhSmsWeb.MessageControllerTest do
         get(conn, Routes.contact_message_path(conn, :show, contact.id, message))
       end
     end
+  end
+
+  defp create_contact(_) do
+    %{
+      contact: fixture(:contact)
+    }
   end
 
   defp create_message(_) do
