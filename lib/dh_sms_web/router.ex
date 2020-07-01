@@ -19,7 +19,10 @@ defmodule DhSmsWeb.Router do
   scope "/", DhSmsWeb do
     pipe_through :browser
 
-    resources "/contacts", ContactController
+    resources "/contacts", ContactController do
+      resources "/messages", MessageController
+    end
+
 
     live "/", PageLive, :index
 
