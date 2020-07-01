@@ -1,21 +1,21 @@
 defmodule DhSmsWeb.ContactController do
   use DhSmsWeb, :controller
 
-  alias DhSms.Accounts
-  alias DhSms.Accounts.Contact
+  alias DhSms.Messaging
+  alias DhSms.Messaging.Contact
 
   def index(conn, _params) do
-    contacts = Accounts.list_contacts()
+    contacts = Messaging.list_contacts()
     render(conn, "index.html", contacts: contacts)
   end
 
   def new(conn, _params) do
-    changeset = Accounts.change_contact(%Contact{})
+    changeset = Messaging.change_contact(%Contact{})
     render(conn, "new.html", changeset: changeset)
   end
 
   def create(conn, %{"contact" => contact_params}) do
-    case Accounts.create_contact(contact_params) do
+    case Messaging.create_contact(contact_params) do
       {:ok, contact} ->
         conn
         |> put_flash(:info, "Contact created successfully.")
@@ -27,20 +27,20 @@ defmodule DhSmsWeb.ContactController do
   end
 
   def show(conn, %{"id" => id}) do
-    contact = Accounts.get_contact!(id)
+    contact = Messaging.get_contact!(id)
     render(conn, "show.html", contact: contact)
   end
 
   def edit(conn, %{"id" => id}) do
-    contact = Accounts.get_contact!(id)
-    changeset = Accounts.change_contact(contact)
+    contact = Messaging.get_contact!(id)
+    changeset = Messaging.change_contact(contact)
     render(conn, "edit.html", contact: contact, changeset: changeset)
   end
 
   def update(conn, %{"id" => id, "contact" => contact_params}) do
-    contact = Accounts.get_contact!(id)
+    contact = Messaging.get_contact!(id)
 
-    case Accounts.update_contact(contact, contact_params) do
+    case Messaging.update_contact(contact, contact_params) do
       {:ok, contact} ->
         conn
         |> put_flash(:info, "Contact updated successfully.")
@@ -52,8 +52,8 @@ defmodule DhSmsWeb.ContactController do
   end
 
   def delete(conn, %{"id" => id}) do
-    contact = Accounts.get_contact!(id)
-    {:ok, _contact} = Accounts.delete_contact(contact)
+    contact = Messaging.get_contact!(id)
+    {:ok, _contact} = Messaging.delete_contact(contact)
 
     conn
     |> put_flash(:info, "Contact deleted successfully.")

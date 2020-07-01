@@ -1,8 +1,8 @@
-defmodule DhSms.Accounts do
+defmodule DhSms.Messaging do
   import Ecto.Query, warn: false
   alias DhSms.Repo
 
-  alias DhSms.Accounts.Contact
+  alias DhSms.Messaging.Contact
 
 
   def list_contacts do

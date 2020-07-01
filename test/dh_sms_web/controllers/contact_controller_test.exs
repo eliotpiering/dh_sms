@@ -1,14 +1,14 @@
 defmodule DhSmsWeb.ContactControllerTest do
   use DhSmsWeb.ConnCase
 
-  alias DhSms.Accounts
+  alias DhSms.Messaging
 
   @create_attrs %{email: "some email", name: "some name", phone: "some phone"}
   @update_attrs %{email: "some updated email", name: "some updated name", phone: "some updated phone"}
   @invalid_attrs %{email: nil, name: nil, phone: nil}
 
   def fixture(:contact) do
-    {:ok, contact} = Accounts.create_contact(@create_attrs)
+    {:ok, contact} = Messaging.create_contact(@create_attrs)
     contact
   end
 

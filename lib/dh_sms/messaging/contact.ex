@@ -1,4 +1,4 @@
-defmodule DhSms.Accounts.Contact do
+defmodule DhSms.Messaging.Contact do
   use Ecto.Schema
   import Ecto.Changeset
 
