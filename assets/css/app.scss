@@ -89,3 +89,13 @@
 .alert:empty {
   display: none;
 }
+
+.conversation-list {
+  ul {
+    list-style: none;
+  }
+  hr {
+    margin: 1.0rem 0;
+  }
+
+}
