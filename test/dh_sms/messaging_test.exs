@@ -1,7 +1,7 @@
 defmodule DhSms.MessagingTest do
   use DhSms.DataCase
 
-  alias DhSms.Messaging
+  alias DhSms.{Contact, Messaging, Repo}
 
   describe "contacts" do
     alias DhSms.Messaging.Contact
@@ -133,6 +133,18 @@ defmodule DhSms.MessagingTest do
       contact = contact_fixture()
       message = message_fixture(contact_id: contact.id)
       assert %Ecto.Changeset{} = Messaging.change_message(message)
+    end
+  end
+
+  describe "relations" do
+    test "contact has many comments" do
+      contact = contact_fixture()
+      Enum.each(0..3, fn _i -> message_fixture(contact_id: contact.id) end)
+
+      contact = Messaging.get_contact!(contact.id)
+        |> Repo.preload(:messages)
+
+      assert length(contact.messages) == 4
     end
   end
 end

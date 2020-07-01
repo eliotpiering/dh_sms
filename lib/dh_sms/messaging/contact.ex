@@ -2,10 +2,13 @@ defmodule DhSms.Messaging.Contact do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias DhSms.Messaging.Message
+
   schema "contacts" do
     field :email, :string
     field :name, :string
     field :phone, :string
+    has_many :messages, Message
 
     timestamps()
   end
