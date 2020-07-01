@@ -13,13 +13,13 @@ defmodule DhSmsWeb.Router do
   pipeline :api do
     plug :accepts, ["json"]
 
-    post "/patients/bulk", DhSmsWeb.ApiPatientController, :bulk_create
+    post "/contacts/bulk", DhSmsWeb.ApiContactController, :bulk_create
   end
 
   scope "/", DhSmsWeb do
     pipe_through :browser
 
-    resources "/patients", PatientController
+    resources "/contacts", ContactController
 
     live "/", PageLive, :index
 

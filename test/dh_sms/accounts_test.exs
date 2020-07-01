@@ -3,66 +3,66 @@ defmodule DhSms.AccountsTest do
 
   alias DhSms.Accounts
 
-  describe "patients" do
-    alias DhSms.Accounts.Patient
+  describe "contacts" do
+    alias DhSms.Accounts.Contact
 
     @valid_attrs %{email: "some email", name: "some name", phone: "some phone"}
     @update_attrs %{email: "some updated email", name: "some updated name", phone: "some updated phone"}
     @invalid_attrs %{email: nil, name: nil, phone: nil}
 
-    def patient_fixture(attrs \\ %{}) do
-      {:ok, patient} =
+    def contact_fixture(attrs \\ %{}) do
+      {:ok, contact} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> Accounts.create_patient()
+        |> Accounts.create_contact()
 
-      patient
+      contact
     end
 
-    test "list_patients/0 returns all patients" do
-      patient = patient_fixture()
-      assert Accounts.list_patients() == [patient]
+    test "list_contacts/0 returns all contacts" do
+      contact = contact_fixture()
+      assert Accounts.list_contacts() == [contact]
     end
 
-    test "get_patient!/1 returns the patient with given id" do
-      patient = patient_fixture()
-      assert Accounts.get_patient!(patient.id) == patient
+    test "get_contact!/1 returns the contact with given id" do
+      contact = contact_fixture()
+      assert Accounts.get_contact!(contact.id) == contact
     end
 
-    test "create_patient/1 with valid data creates a patient" do
-      assert {:ok, %Patient{} = patient} = Accounts.create_patient(@valid_attrs)
-      assert patient.email == "some email"
-      assert patient.name == "some name"
-      assert patient.phone == "some phone"
+    test "create_contact/1 with valid data creates a contact" do
+      assert {:ok, %Contact{} = contact} = Accounts.create_contact(@valid_attrs)
+      assert contact.email == "some email"
+      assert contact.name == "some name"
+      assert contact.phone == "some phone"
     end
 
-    test "create_patient/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Accounts.create_patient(@invalid_attrs)
+    test "create_contact/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_contact(@invalid_attrs)
     end
 
-    test "update_patient/2 with valid data updates the patient" do
-      patient = patient_fixture()
-      assert {:ok, %Patient{} = patient} = Accounts.update_patient(patient, @update_attrs)
-      assert patient.email == "some updated email"
-      assert patient.name == "some updated name"
-      assert patient.phone == "some updated phone"
+    test "update_contact/2 with valid data updates the contact" do
+      contact = contact_fixture()
+      assert {:ok, %Contact{} = contact} = Accounts.update_contact(contact, @update_attrs)
+      assert contact.email == "some updated email"
+      assert contact.name == "some updated name"
+      assert contact.phone == "some updated phone"
     end
 
-    test "update_patient/2 with invalid data returns error changeset" do
-      patient = patient_fixture()
-      assert {:error, %Ecto.Changeset{}} = Accounts.update_patient(patient, @invalid_attrs)
-      assert patient == Accounts.get_patient!(patient.id)
+    test "update_contact/2 with invalid data returns error changeset" do
+      contact = contact_fixture()
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_contact(contact, @invalid_attrs)
+      assert contact == Accounts.get_contact!(contact.id)
     end
 
-    test "delete_patient/1 deletes the patient" do
-      patient = patient_fixture()
-      assert {:ok, %Patient{}} = Accounts.delete_patient(patient)
-      assert_raise Ecto.NoResultsError, fn -> Accounts.get_patient!(patient.id) end
+    test "delete_contact/1 deletes the contact" do
+      contact = contact_fixture()
+      assert {:ok, %Contact{}} = Accounts.delete_contact(contact)
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_contact!(contact.id) end
     end
 
-    test "change_patient/1 returns a patient changeset" do
-      patient = patient_fixture()
-      assert %Ecto.Changeset{} = Accounts.change_patient(patient)
+    test "change_contact/1 returns a contact changeset" do
+      contact = contact_fixture()
+      assert %Ecto.Changeset{} = Accounts.change_contact(contact)
     end
   end
 end

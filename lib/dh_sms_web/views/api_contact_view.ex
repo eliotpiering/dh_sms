@@ -1,4 +1,4 @@
-defmodule DhSmsWeb.ApiPatientView do
+defmodule DhSmsWeb.ApiContactView do
   use DhSmsWeb, :view
 
   def render("bulk_create.json", %{success: successes, fail: failures}) do

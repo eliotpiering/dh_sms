@@ -1,4 +1,4 @@
-defmodule DhSmsWeb.PatientControllerTest do
+defmodule DhSmsWeb.ContactControllerTest do
   use DhSmsWeb.ConnCase
 
   alias DhSms.Accounts
@@ -7,82 +7,82 @@ defmodule DhSmsWeb.PatientControllerTest do
   @update_attrs %{email: "some updated email", name: "some updated name", phone: "some updated phone"}
   @invalid_attrs %{email: nil, name: nil, phone: nil}
 
-  def fixture(:patient) do
-    {:ok, patient} = Accounts.create_patient(@create_attrs)
-    patient
+  def fixture(:contact) do
+    {:ok, contact} = Accounts.create_contact(@create_attrs)
+    contact
   end
 
   describe "index" do
-    test "lists all patients", %{conn: conn} do
-      conn = get(conn, Routes.patient_path(conn, :index))
-      assert html_response(conn, 200) =~ "Listing Patients"
+    test "lists all contacts", %{conn: conn} do
+      conn = get(conn, Routes.contact_path(conn, :index))
+      assert html_response(conn, 200) =~ "Listing Contacts"
     end
   end
 
-  describe "new patient" do
+  describe "new contact" do
     test "renders form", %{conn: conn} do
-      conn = get(conn, Routes.patient_path(conn, :new))
-      assert html_response(conn, 200) =~ "New Patient"
+      conn = get(conn, Routes.contact_path(conn, :new))
+      assert html_response(conn, 200) =~ "New Contact"
     end
   end
 
-  describe "create patient" do
+  describe "create contact" do
     test "redirects to show when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.patient_path(conn, :create), patient: @create_attrs)
+      conn = post(conn, Routes.contact_path(conn, :create), contact: @create_attrs)
 
       assert %{id: id} = redirected_params(conn)
-      assert redirected_to(conn) == Routes.patient_path(conn, :show, id)
+      assert redirected_to(conn) == Routes.contact_path(conn, :show, id)
 
-      conn = get(conn, Routes.patient_path(conn, :show, id))
-      assert html_response(conn, 200) =~ "Show Patient"
+      conn = get(conn, Routes.contact_path(conn, :show, id))
+      assert html_response(conn, 200) =~ "Show Contact"
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.patient_path(conn, :create), patient: @invalid_attrs)
-      assert html_response(conn, 200) =~ "New Patient"
+      conn = post(conn, Routes.contact_path(conn, :create), contact: @invalid_attrs)
+      assert html_response(conn, 200) =~ "New Contact"
     end
   end
 
-  describe "edit patient" do
-    setup [:create_patient]
+  describe "edit contact" do
+    setup [:create_contact]
 
-    test "renders form for editing chosen patient", %{conn: conn, patient: patient} do
-      conn = get(conn, Routes.patient_path(conn, :edit, patient))
-      assert html_response(conn, 200) =~ "Edit Patient"
+    test "renders form for editing chosen contact", %{conn: conn, contact: contact} do
+      conn = get(conn, Routes.contact_path(conn, :edit, contact))
+      assert html_response(conn, 200) =~ "Edit Contact"
     end
   end
 
-  describe "update patient" do
-    setup [:create_patient]
+  describe "update contact" do
+    setup [:create_contact]
 
-    test "redirects when data is valid", %{conn: conn, patient: patient} do
-      conn = put(conn, Routes.patient_path(conn, :update, patient), patient: @update_attrs)
-      assert redirected_to(conn) == Routes.patient_path(conn, :show, patient)
+    test "redirects when data is valid", %{conn: conn, contact: contact} do
+      conn = put(conn, Routes.contact_path(conn, :update, contact), contact: @update_attrs)
+      assert redirected_to(conn) == Routes.contact_path(conn, :show, contact)
 
-      conn = get(conn, Routes.patient_path(conn, :show, patient))
+      conn = get(conn, Routes.contact_path(conn, :show, contact))
       assert html_response(conn, 200) =~ "some updated email"
     end
 
-    test "renders errors when data is invalid", %{conn: conn, patient: patient} do
-      conn = put(conn, Routes.patient_path(conn, :update, patient), patient: @invalid_attrs)
-      assert html_response(conn, 200) =~ "Edit Patient"
+    test "renders errors when data is invalid", %{conn: conn, contact: contact} do
+      conn = put(conn, Routes.contact_path(conn, :update, contact), contact: @invalid_attrs)
+      assert html_response(conn, 200) =~ "Edit Contact"
     end
   end
 
-  describe "delete patient" do
-    setup [:create_patient]
+  describe "delete contact" do
+    setup [:create_contact]
 
-    test "deletes chosen patient", %{conn: conn, patient: patient} do
-      conn = delete(conn, Routes.patient_path(conn, :delete, patient))
-      assert redirected_to(conn) == Routes.patient_path(conn, :index)
+    test "deletes chosen contact", %{conn: conn, contact: contact} do
+      conn = delete(conn, Routes.contact_path(conn, :delete, contact))
+      assert redirected_to(conn) == Routes.contact_path(conn, :index)
       assert_error_sent 404, fn ->
-        get(conn, Routes.patient_path(conn, :show, patient))
+        get(conn, Routes.contact_path(conn, :show, contact))
       end
     end
   end
 
-  defp create_patient(_) do
-    patient = fixture(:patient)
-    %{patient: patient}
+  defp create_contact(_) do
+    contact = fixture(:contact)
+    %{contact: contact}
   end
 end

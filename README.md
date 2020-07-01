@@ -10,8 +10,8 @@ To start your Phoenix server:
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 ## API
-### Bulk Load Patients
+### Bulk Load Contactss
 
 ```
-curl -d "@patients.json" -X POST -H "Content-Type: application/json" http://localhost:4000/patients/bulk
+curl -d "@contacts.json" -X POST -H "Content-Type: application/json" http://localhost:4000/contacts/bulk
 ```

@@ -1,66 +1,28 @@
 defmodule DhSms.Accounts do
-  @moduledoc """
-  The Accounts context.
-  """
-
   import Ecto.Query, warn: false
   alias DhSms.Repo
 
-  alias DhSms.Accounts.Patient
+  alias DhSms.Accounts.Contact
 
-  @doc """
-  Returns the list of patients.
 
-  ## Examples
-
-      iex> list_patients()
-      [%Patient{}, ...]
-
-  """
-  def list_patients do
-    Repo.all(Patient)
+  def list_contacts do
+    Repo.all(Contact)
   end
 
-  @doc """
-  Gets a single patient.
+  def get_contact!(id), do: Repo.get!(Contact, id)
 
-  Raises `Ecto.NoResultsError` if the Patient does not exist.
-
-  ## Examples
-
-      iex> get_patient!(123)
-      %Patient{}
-
-      iex> get_patient!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_patient!(id), do: Repo.get!(Patient, id)
-
-  @doc """
-  Creates a patient.
-
-  ## Examples
-
-      iex> create_patient(%{field: value})
-      {:ok, %Patient{}}
-
-      iex> create_patient(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def create_patient(attrs \\ %{}) do
-    %Patient{}
-    |> Patient.changeset(attrs)
+  def create_contact(attrs \\ %{}) do
+    %Contact{}
+    |> Contact.changeset(attrs)
     |> Repo.insert()
   end
 
-  def create_patients(patients \\ []) do
-    patients
+  def create_contacts(contacts \\ []) do
+    contacts
     |> Enum.reduce(%{success: [], fail: []}, fn attrs, acc ->
-      case create_patient(attrs) do
-        {:ok, patient} ->
-          %{acc | success: [patient | acc.success]}
+      case create_contact(attrs) do
+        {:ok, contact} ->
+          %{acc | success: [contact | acc.success]}
 
         {:error, %Ecto.Changeset{} = changeset} ->
           %{acc | fail: [changeset | acc.fail]}
@@ -68,50 +30,17 @@ defmodule DhSms.Accounts do
     end)
   end
 
-  @doc """
-  Updates a patient.
-
-  ## Examples
-
-      iex> update_patient(patient, %{field: new_value})
-      {:ok, %Patient{}}
-
-      iex> update_patient(patient, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_patient(%Patient{} = patient, attrs) do
-    patient
-    |> Patient.changeset(attrs)
+  def update_contact(%Contact{} = contact, attrs) do
+    contact
+    |> Contact.changeset(attrs)
     |> Repo.update()
   end
 
-  @doc """
-  Deletes a patient.
-
-  ## Examples
-
-      iex> delete_patient(patient)
-      {:ok, %Patient{}}
-
-      iex> delete_patient(patient)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_patient(%Patient{} = patient) do
-    Repo.delete(patient)
+  def delete_contact(%Contact{} = contact) do
+    Repo.delete(contact)
   end
 
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking patient changes.
-
-  ## Examples
-
-      iex> change_patient(patient)
-      %Ecto.Changeset{data: %Patient{}}
-
-  """
-  def change_patient(%Patient{} = patient, attrs \\ %{}) do
-    Patient.changeset(patient, attrs)
+  def change_contact(%Contact{} = contact, attrs \\ %{}) do
+    Contact.changeset(contact, attrs)
   end
 end
