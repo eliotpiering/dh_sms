@@ -1,27 +1,30 @@
-defmodule DhSms.Accounts.Patient do
+defmodule DhSms.Messaging.Contact do
   use Ecto.Schema
   import Ecto.Changeset
 
-  schema "patients" do
+  alias DhSms.Messaging.Message
+
+  schema "contacts" do
     field :email, :string
     field :name, :string
     field :phone, :string
+    has_many :messages, Message
 
     timestamps()
   end
 
   @doc false
-  def changeset(patient, attrs) do
-    patient
+  def changeset(contact, attrs) do
+    contact
     |> cast(attrs, [:name, :email, :phone])
     |> validate_required([:name, :email, :phone])
     |> unique_constraint(:email)
   end
 
-  def with_timestamps(patient) do
+  def with_timestamps(contact) do
     timestamps = %{created_at: DateTime.utc_now(), updated_at: DateTime.utc_now()}
 
-    patient
+    contact
     |> cast(timestamps, [:inserted_at, :updated_at])
   end
 end

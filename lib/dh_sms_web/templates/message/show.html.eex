@@ -1,0 +1,13 @@
+<h1>Show Message</h1>
+
+<ul>
+
+  <li>
+    <strong>Body:</strong>
+    <%= @message.body %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.contact_message_path(@conn, :edit, @contact_id, @message) %></span>
+<span><%= link "Back", to: Routes.contact_message_path(@conn, :index, @contact_id) %></span>
