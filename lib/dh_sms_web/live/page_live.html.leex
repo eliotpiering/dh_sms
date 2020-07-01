@@ -1,35 +1,19 @@
-<section class="phx-hero">
-  <h1><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h1>
-  <p>Peace-of-mind from prototype to production</p>
-
-  <form phx-change="suggest" phx-submit="search">
-    <input type="text" name="q" value="<%= @query %>" placeholder="Live dependency search" list="results" autocomplete="off"/>
-    <datalist id="results">
-      <%= for {app, _vsn} <- @results do %>
-        <option value="<%= app %>"><%= app %></option>
-      <% end %>
-    </datalist>
-    <button type="submit" phx-disable-with="Searching...">Go to Hexdocs</button>
-  </form>
-</section>
-
 <section class="row">
-  <article class="column">
-    <h2>Resources</h2>
+  <article class="column column-33 conversation-list">
+    <h2>Conversations</h2>
     <ul>
-      <li>
-        <a href="https://hexdocs.pm/phoenix/overview.html">Guides &amp; Docs</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix">Source</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix/blob/v1.5/CHANGELOG.md">v1.5 Changelog</a>
-      </li>
+      <%= for {_, conversation} <- @conversations do %>
+        <li>
+          <label><%= conversation.contact_name %></label>
+          <span><%= message_preview(conversation) %></span></br>
+          <label><small><%= formatted_last_read_date(conversation) %></small></label>
+          <hr/>
+        </li>
+      <% end %>
     </ul>
   </article>
-  <article class="column">
-    <h2>Help</h2>
+  <article class="column column-67" class="current-conversation">
+    <h2></h2>
     <ul>
       <li>
         <a href="https://elixirforum.com/c/phoenix-forum">Forum</a>
