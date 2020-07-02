@@ -23,7 +23,7 @@ defmodule DhSms.ConversationTest do
                messages: [first_msg],
                contact_name: first_msg.name,
                contact_id: first_msg.contact_id,
-               last_read_datetime: first_msg.sent_at
+               last_sent_datetime: first_msg.sent_at
              }
     end
   end

@@ -3,19 +3,26 @@
     <br/>
     <h2>Conversations</h2>
     <ul>
-      <%= for {_, conversation} <- @conversations do %>
+      <%= for {_key, conversation} <- @conversations do %>
         <li class="<%= conversation_mini_class(conversation, @current_conversation.contact_id) %>" phx-click="change_conversation" phx-value-contact-id="<%= conversation.contact_id %>">
-          <label><%= conversation.contact_name %></label>
+          <label><%= conversation.contact_name %>
+            <%= cond do %>
+              <% conversation.unread_count > 0 -> %>
+                <span class="unread-count"><%= conversation.unread_count %></span>
+              <% true -> %>
+                <span></span>
+            <% end %>
+          </label>
           <span><%= message_preview(conversation) %></span></br>
-          <label><small><%= formatted_date(conversation.last_read_datetime) %></small></label>
+          <label><small><%= formatted_date(conversation.last_sent_datetime) %></small></label>
         </li>
         <hr/>
       <% end %>
     </ul>
   </article>
   <article class="column column-67 current-conversation">
-    <h3><%= @current_conversation.contact_name %></h3>
-    <ul>
+    <h3 phx-hook="CurrentChat"><%= @current_conversation.contact_name %></h3>
+    <ul >
       <%= for message <- messages_reverse_order(@current_conversation) do %>
         <li class="row">
           <div class="message-bubble column column-40 <%= conversation_message_class(message) %>">
@@ -27,11 +34,11 @@
       <% end %>
     </ul>
     <div class="column column-67 chat-input">
-      <%= form_tag "#", [phx_submit: :new_message] do %>
+      <%= form_tag "#", [phx_submit: :new_message, phx_change: :update_chat_message] do %>
         <fieldset>
           <input type="hidden" name="contact-id" value="<%= @current_conversation.contact_id %>">
-          <textarea name="body" placeholder="Type a new message"></textarea>
-          <%= submit "Send", class: "button-primary"%>
+          <textarea name="body" placeholder="Type a new message"><%= @chat_message %></textarea>
+          <%= submit "Send", class: "button-primary", disabled: is_nil(@current_conversation.id) %>
         </fieldset>
       <% end %>
     </div>

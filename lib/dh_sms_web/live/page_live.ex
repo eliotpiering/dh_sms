@@ -1,14 +1,21 @@
 defmodule DhSmsWeb.PageLive do
   use DhSmsWeb, :live_view
 
-  alias DhSms.Conversation
-  alias DhSms.TestMessage
+  alias DhSms.Conversations
+  alias DhSmsWeb.ConversationPresenter
 
   @impl true
   def mount(_params, _session, socket) do
-    messages = TestMessage.fetch_all()
-    all_conversations = Conversation.build_from_messages(messages)
-    {:ok, assign(socket, conversations: all_conversations, current_conversation: %Conversation{})}
+    all_conversations =
+      Conversations.list_with_contacts_and_messages()
+    |> ConversationPresenter.ordered_from_conversation_list()
+
+    {:ok,
+     assign(socket,
+       conversations: all_conversations,
+       current_conversation: %ConversationPresenter{},
+       chat_message: "",
+     )}
   end
 
   def message_preview(conversation) do
@@ -18,7 +25,7 @@ defmodule DhSmsWeb.PageLive do
   end
 
   def formatted_date(date) do
-    {:ok, date} = date |> DateTime.shift_zone("America/Chicago")
+    {:ok, date} = DateTime.shift_zone(date, "America/Chicago")
     {:ok, formatted} = Calendar.Strftime.strftime(date, "%a %b %e, %l:%M %p")
     formatted
   end
@@ -28,54 +35,35 @@ defmodule DhSmsWeb.PageLive do
   end
 
   def conversation_mini_class(conversation, current_contact_id) do
-    if (conversation.contact_id == current_contact_id) do
+    if conversation.contact_id == current_contact_id do
       "active-conversation"
     end
   end
 
   def messages_reverse_order(conversation) do
-    conversation.messages |> Enum.reverse
+    conversation.messages |> Enum.reverse()
   end
-
 
   @impl true
   def handle_event("change_conversation", %{"contact-id" => contact_id}, socket) do
-    conversation = socket.assigns.conversations |> Map.get(contact_id)
-    {:noreply, assign(socket, current_conversation: conversation)}
+    conversation = socket.assigns.conversations |> ConversationPresenter.get_by(contact_id)
+    {:noreply, assign(socket, current_conversation: conversation, chat_message: "")}
   end
 
 
   @impl true
-  def handle_event("new_message", %{"body" => body, "contact-id" => contact_id}, socket) do
-    #Conversation.add_message(conversation_id, body)
-    conversations = Conversation.add_message_to_conversations(socket.assigns.conversations, %TestMessage{contact_id: contact_id, name: "", body: body, from_dh: true, sent_at: DateTime.utc_now()})
-
-    {:noreply, assign(socket, conversations: conversations, current_conversation: Map.get(conversations, contact_id))}
+  def handle_event("update_chat_message", %{"body" => body}, socket) do
+    {:noreply, assign(socket, chat_message: body)}
   end
 
-  # @impl true
-  # def handle_event("search", %{"q" => query}, socket) do
-  #   case search(query) do
-  #     %{^query => vsn} ->
-  #       {:noreply, redirect(socket, external: "https://hexdocs.pm/#{query}/#{vsn}")}
+  @impl true
+  def handle_event("new_message", %{"contact-id" => contact_id}, socket) do
+    conversation_id = socket.assigns.current_conversation.id
+    {:ok, message} = Conversations.create_message(%{body: socket.assigns.chat_message, from_dh: true, conversation_id: conversation_id})
 
-  #     _ ->
-  #       {:noreply,
-  #        socket
-  #        |> put_flash(:error, "No dependencies found matching \"#{query}\"")
-  #        |> assign(results: %{}, query: query)}
-  #   end
-  # end
+    conversations = ConversationPresenter.add_message_to_conversations(socket.assigns.conversations, message)
+    current_conversation = ConversationPresenter.get_by(conversations, socket.assigns.current_conversation.id)
 
-  # defp search(query) do
-  #   if not DhSmsWeb.Endpoint.config(:code_reloader) do
-  #     raise "action disabled when not in development"
-  #   end
-
-  #   for {app, desc, vsn} <- Application.started_applications(),
-  #       app = to_string(app),
-  #       String.starts_with?(app, query) and not List.starts_with?(desc, ~c"ERTS"),
-  #       into: %{},
-  #       do: {app, vsn}
-  # end
+    {:noreply, assign(socket, chat_message: "", conversations: conversations, current_conversation: current_conversation)}
+  end
 end

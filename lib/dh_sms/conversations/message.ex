@@ -5,7 +5,8 @@ defmodule DhSms.Conversations.Message do
   alias DhSms.Conversations.{Conversation}
 
   schema "messages" do
-    field :body, :string
+    field :body, :text
+    field :from_dh, :boolean
 
     belongs_to :conversation, Conversation
 
@@ -15,7 +16,7 @@ defmodule DhSms.Conversations.Message do
   @doc false
   def changeset(message, attrs) do
     message
-    |> cast(attrs, [:body, :conversation_id])
-    |> validate_required([:body, :conversation_id])
+    |> cast(attrs, [:body, :conversation_id, :from_dh])
+    |> validate_required([:body, :conversation_id, :from_dh])
   end
 end

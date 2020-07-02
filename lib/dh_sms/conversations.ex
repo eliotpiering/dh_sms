@@ -8,6 +8,10 @@ defmodule DhSms.Conversations do
     Repo.all(Conversation)
   end
 
+  def list_with_contacts_and_messages() do
+    Repo.all from c in Conversation, preload: [:contact, :messages]
+  end
+
   def get_conversation!(id), do: Repo.get!(Conversation, id)
 
   def create_conversation(attrs \\ %{}) do
