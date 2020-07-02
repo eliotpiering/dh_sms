@@ -1,0 +1,30 @@
+<h1>Listing Campaigns</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Send delay</th>
+      <th>Intro message</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for campaign <- @campaigns do %>
+    <tr>
+      <td><%= campaign.name %></td>
+      <td><%= campaign.send_delay %></td>
+      <td><%= campaign.intro_message %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.campaign_path(@conn, :show, campaign) %></span>
+        <span><%= link "Edit", to: Routes.campaign_path(@conn, :edit, campaign) %></span>
+        <span><%= link "Delete", to: Routes.campaign_path(@conn, :delete, campaign), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Campaign", to: Routes.campaign_path(@conn, :new) %></span>
