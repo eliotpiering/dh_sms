@@ -140,7 +140,7 @@ defmodule DhSms.ConversationsTest do
   describe "messages" do
     alias DhSms.Conversations.Message
 
-    @valid_attrs %{body: "some body"}
+    @valid_attrs %{body: "some body", from_dh: false}
     @update_attrs %{body: "some updated body"}
     @invalid_attrs %{body: nil}
 

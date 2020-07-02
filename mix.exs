@@ -46,7 +46,10 @@ defmodule DhSms.MixProject do
       {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      {:faker_elixir_octopus, "~> 1.0.0",  only: [:dev, :test]},
+      {:tzdata, "~> 1.0.1"},
+      {:calendar, "~> 1.0.0"}
     ]
   end
 
