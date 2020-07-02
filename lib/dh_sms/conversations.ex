@@ -1,15 +1,42 @@
-defmodule DhSms.Messaging do
+defmodule DhSms.Conversations do
   import Ecto.Query, warn: false
   alias DhSms.Repo
 
-  alias DhSms.Messaging.{Contact, Message}
+  alias DhSms.Conversations.{Conversation, Contact, Message}
 
-
-  def list_contacts do
-    Repo.all(Contact)
+  def list_conversations do
+    Repo.all(Conversation)
   end
 
-  def get_contact!(id), do: Repo.get!(Contact, id)
+  def get_conversation!(id), do: Repo.get!(Conversation, id)
+
+  def create_conversation(attrs \\ %{}) do
+    %Conversation{}
+    |> Conversation.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def update_conversation(%Conversation{} = conversation, attrs) do
+    conversation
+    |> Conversation.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def delete_conversation(%Conversation{} = conversation) do
+    Repo.delete(conversation)
+  end
+
+  def change_conversation(%Conversation{} = conversation, attrs \\ %{}) do
+    Conversation.changeset(conversation, attrs)
+  end
+
+  def list_contacts(conversation_id) do
+    Repo.all(from c in Contact, where: c.conversation_id == ^conversation_id)
+  end
+
+  def get_contact!(conversation_id, id) do
+    Repo.get_by!(Contact, [id: id, conversation_id: conversation_id])
+  end
 
   def create_contact(attrs \\ %{}) do
     %Contact{}
@@ -44,11 +71,13 @@ defmodule DhSms.Messaging do
     Contact.changeset(contact, attrs)
   end
 
-  def list_messages(contact_id) do
-    Repo.all(from m in Message, where: m.contact_id == ^contact_id)
+  def list_messages(conversation_id) do
+    Repo.all(from m in Message, where: m.conversation_id == ^conversation_id)
   end
 
-  def get_message!(contact_id, id), do: Repo.get_by!(Message, [id: id, contact_id: contact_id])
+  def get_message!(conversation_id, id) do
+    Repo.get_by!(Message, [id: id, conversation_id: conversation_id])
+  end
 
   def create_message(attrs \\ %{}) do
     %Message{}

@@ -1,14 +1,15 @@
-defmodule DhSms.Messaging.Contact do
+defmodule DhSms.Conversations.Contact do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias DhSms.Messaging.Message
+  alias DhSms.Conversations.{Conversation}
 
   schema "contacts" do
     field :email, :string
     field :name, :string
     field :phone, :string
-    has_many :messages, Message
+
+    belongs_to :conversation, Conversation
 
     timestamps()
   end
@@ -16,8 +17,8 @@ defmodule DhSms.Messaging.Contact do
   @doc false
   def changeset(contact, attrs) do
     contact
-    |> cast(attrs, [:name, :email, :phone])
-    |> validate_required([:name, :email, :phone])
+    |> cast(attrs, [:name, :email, :phone, :conversation_id])
+    |> validate_required([:name, :email, :phone, :conversation_id])
     |> unique_constraint(:email)
   end
 
