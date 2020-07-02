@@ -128,7 +128,12 @@ defmodule DhSms.Messaging do
     |> Repo.insert()
   end
 
-  def create_and_send_message(attrs \\ %{}) do
+  def create_and_send_message(contact_id, attrs \\ %{}) do
+    #TODO error catching
+    contact = get_contact!(contact_id)
+    to = contact.phone
+    {:ok, _} = DhSms.Twilio.send_message(to, attrs[:body])
+    {:ok, message} = create_message(attrs)
   end
 
   def update_message(%Message{} = message, attrs) do

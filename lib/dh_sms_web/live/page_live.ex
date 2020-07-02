@@ -58,8 +58,10 @@ defmodule DhSmsWeb.PageLive do
 
   @impl true
   def handle_event("new_message", %{"contact-id" => contact_id}, socket) do
-    conversation_id = socket.assigns.current_conversation.id
-    {:ok, message} = Messaging.create_message(%{body: socket.assigns.chat_message, from_dh: true, conversation_id: conversation_id})
+    conversation = socket.assigns.current_conversation
+    conversation_id = conversation.id
+    contact_id = conversation.contact_id
+    {:ok, message} = Messaging.create_and_send_message(contact_id, %{body: socket.assigns.chat_message, from_dh: true, conversation_id: conversation_id})
 
     conversations = ConversationPresenter.add_message_to_conversations(socket.assigns.conversations, message)
     current_conversation = ConversationPresenter.get_by(conversations, socket.assigns.current_conversation.id)
