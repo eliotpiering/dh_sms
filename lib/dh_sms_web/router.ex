@@ -25,7 +25,10 @@ defmodule DhSmsWeb.Router do
     end
 
     live "/", PageLive, :index
+  end
 
+  scope "/webhooks", DhSmsWeb do
+    resources "/messages", Webhooks.MessageController, only: [:create]
   end
 
   # Other scopes may use custom stacks.
