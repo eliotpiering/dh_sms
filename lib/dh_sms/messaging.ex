@@ -1,46 +1,51 @@
-defmodule DhSms.Conversations do
+defmodule DhSms.Messaging do
   import Ecto.Query, warn: false
   alias DhSms.Repo
 
-  alias DhSms.Conversations.{Conversation, Contact, Message}
-
-  def list_conversations do
-    Repo.all(Conversation)
-  end
+  alias DhSms.Messaging.{
+    Campaign,
+    Conversation,
+    Contact,
+    Message
+  }
 
   def list_with_contacts_and_messages() do
     Repo.all from c in Conversation, preload: [:contact, :messages]
   end
 
+  def list_campaigns do
+    Repo.all(Campaign)
+  end
+
+  def get_campaign!(id), do: Repo.get!(Campaign, id)
+
   def get_conversation!(id), do: Repo.get!(Conversation, id)
 
-  def create_conversation(attrs \\ %{}) do
-    %Conversation{}
-    |> Conversation.changeset(attrs)
+  def create_campaign(attrs \\ %{}) do
+    %Campaign{}
+    |> Campaign.changeset(attrs)
     |> Repo.insert()
   end
 
-  def update_conversation(%Conversation{} = conversation, attrs) do
-    conversation
-    |> Conversation.changeset(attrs)
+  def update_campaign(%Campaign{} = campaign, attrs) do
+    campaign
+    |> Campaign.changeset(attrs)
     |> Repo.update()
   end
 
-  def delete_conversation(%Conversation{} = conversation) do
-    Repo.delete(conversation)
+  def delete_campaign(%Campaign{} = campaign) do
+    Repo.delete(campaign)
   end
 
-  def change_conversation(%Conversation{} = conversation, attrs \\ %{}) do
-    Conversation.changeset(conversation, attrs)
+  def change_campaign(%Campaign{} = campaign, attrs \\ %{}) do
+    Campaign.changeset(campaign, attrs)
   end
 
-  def list_contacts(conversation_id) do
-    Repo.all(from c in Contact, where: c.conversation_id == ^conversation_id)
+  def list_contacts() do
+    Repo.all(Contact)
   end
 
-  def get_contact!(conversation_id, id) do
-    Repo.get_by!(Contact, [id: id, conversation_id: conversation_id])
-  end
+  def get_contact!(id), do: Repo.get!(Contact, id)
 
   def create_contact(attrs \\ %{}) do
     %Contact{}
@@ -75,13 +80,37 @@ defmodule DhSms.Conversations do
     Contact.changeset(contact, attrs)
   end
 
-  def list_messages(conversation_id) do
-    Repo.all(from m in Message, where: m.conversation_id == ^conversation_id)
+  def list_conversations do
+    Repo.all(Conversation)
   end
 
-  def get_message!(conversation_id, id) do
-    Repo.get_by!(Message, [id: id, conversation_id: conversation_id])
+  def get_conversation!(id), do: Repo.get!(Conversation, id)
+
+  def create_conversation(attrs \\ %{}) do
+    %Conversation{}
+    |> Conversation.changeset(attrs)
+    |> Repo.insert()
   end
+
+  def update_conversation(%Conversation{} = conversation, attrs) do
+    conversation
+    |> Conversation.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def delete_conversation(%Conversation{} = conversation) do
+    Repo.delete(conversation)
+  end
+
+  def change_conversation(%Conversation{} = conversation, attrs \\ %{}) do
+    Conversation.changeset(conversation, attrs)
+  end
+
+  def list_messages() do
+    Repo.all(Message)
+  end
+
+  def get_message!(id), do: Repo.get!(Message, id)
 
   def create_message(attrs \\ %{}) do
     %Message{}

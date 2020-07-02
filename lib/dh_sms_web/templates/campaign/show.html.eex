@@ -1,0 +1,23 @@
+<h1>Show Campaign</h1>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @campaign.name %>
+  </li>
+
+  <li>
+    <strong>Send delay:</strong>
+    <%= @campaign.send_delay %>
+  </li>
+
+  <li>
+    <strong>Intro message:</strong>
+    <%= @campaign.intro_message %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.campaign_path(@conn, :edit, @campaign) %></span>
+<span><%= link "Back", to: Routes.campaign_path(@conn, :index) %></span>
