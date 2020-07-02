@@ -17,6 +17,8 @@
   <%= text_input f, :phone %>
   <%= error_tag f, :phone %>
 
+  <%= hidden_input f, :conversation_id %>
+
   <div>
     <%= submit "Save" %>
   </div>

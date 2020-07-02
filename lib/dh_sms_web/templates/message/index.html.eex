@@ -14,13 +14,13 @@
       <td><%= message.body %></td>
 
       <td>
-        <span><%= link "Show", to: Routes.contact_message_path(@conn, :show, @contact_id, message) %></span>
-        <span><%= link "Edit", to: Routes.contact_message_path(@conn, :edit, @contact_id, message) %></span>
-        <span><%= link "Delete", to: Routes.contact_message_path(@conn, :delete, @contact_id, message), method: :delete, data: [confirm: "Are you sure?"] %></span>
+        <span><%= link "Show", to: Routes.conversation_message_path(@conn, :show, @conversation_id, message) %></span>
+        <span><%= link "Edit", to: Routes.conversation_message_path(@conn, :edit, @conversation_id, message) %></span>
+        <span><%= link "Delete", to: Routes.conversation_message_path(@conn, :delete, @conversation_id, message), method: :delete, data: [confirm: "Are you sure?"] %></span>
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
 
-<span><%= link "New Message", to: Routes.contact_message_path(@conn, :new, @contact_id) %></span>
+<span><%= link "New Message", to: Routes.conversation_message_path(@conn, :new, @conversation_id) %></span>

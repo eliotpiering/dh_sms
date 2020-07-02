@@ -1,5 +1,5 @@
 <h1>Edit Message</h1>
 
-<%= render "form.html", Map.put(assigns, :action, Routes.contact_message_path(@conn, :update, @contact_id, @message)) %>
+<%= render "form.html", Map.put(assigns, :action, Routes.conversation_message_path(@conn, :update, @conversation_id, @message)) %>
 
-<span><%= link "Back", to: Routes.contact_message_path(@conn, :index, @contact_id) %></span>
+<span><%= link "Back", to: Routes.conversation_message_path(@conn, :index, @conversation_id) %></span>
