@@ -16,7 +16,7 @@ defmodule DhSmsWeb.Webhooks.MessageController do
     # end
     conn
     |> put_status(:created)
-    |> json(%{})
+    |> html("<Response></Response>")
   end
 
 # PARAMS:: %{
