@@ -202,8 +202,8 @@ defmodule DhSms.ConversationsTest do
   end
 
   describe "messages" do
-    @valid_attrs %{body: "some body"}
-    @update_attrs %{body: "some updated body"}
+    @valid_attrs %{body: "some body", from_dh: true}
+    @update_attrs %{body: "some updated body", from_dh: false}
     @invalid_attrs %{body: nil}
 
     def message_fixture(attrs \\ %{}) do
