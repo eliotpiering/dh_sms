@@ -9,11 +9,17 @@ defmodule DhSms.Messaging do
     Message
   }
 
+  def list_with_contacts_and_messages() do
+    Repo.all from c in Conversation, preload: [:contact, :messages]
+  end
+
   def list_campaigns do
     Repo.all(Campaign)
   end
 
   def get_campaign!(id), do: Repo.get!(Campaign, id)
+
+  def get_conversation!(id), do: Repo.get!(Conversation, id)
 
   def create_campaign(attrs \\ %{}) do
     %Campaign{}
