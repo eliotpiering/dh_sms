@@ -11,12 +11,25 @@
 # and so on) as they will fail if something goes wrong.
 alias DhSms.Messaging
 
-{:ok, campaign} = Messaging.create_campaign(%{name: "First Campaign", intro_message: "Hey from dispatch", send_delay: 4 })
-{:ok, contact} = Messaging.create_contact(%{campaign_id: campaign.id, name: FakerElixir.Name.name(), email: FakerElixir.Name.name(), phone: "***********"})
-{:ok, convo} = Messaging.create_conversation(%{contact_id: contact.id, campaign_id: campaign.id})
+{:ok, campaign} =
+  %{name: Faker.Company.En.bs(), send_delay: 1, intro_message: Faker.Lorem.Shakespeare.hamlet()}
+  |> Messaging.create_campaign()
 
-msg_count = :rand.uniform(10)
-(0..msg_count) |> Enum.each(fn j ->
-  from_dh = rem(j, 2) == 1
-  Messaging.create_message(%{body: FakerElixir.Lorem.sentences(2), conversation_id: convo.id, from_dh: from_dh})
+Enum.each(1..5, fn i ->
+  dummy_email = "#{Faker.Name.first_name() <> Faker.Name.first_name() <> Faker.Name.first_name()}@example.com"
+
+  {:ok, contact} =
+    %{name: Faker.Name.name(), email: dummy_email, phone: "***********"}
+    |> Messaging.create_contact()
+
+    {:ok, conversation} = Messaging.create_conversation(%{contact_id: contact.id, campaign_id: campaign.id})
+
+    msg_count = :rand.uniform(10)
+
+    Enum.each(0..msg_count, fn j ->
+      from_dh = rem(j, 2) == 1
+      Messaging.create_message(%{body: Faker.Cat.En.breed(), conversation_id: conversation.id, from_dh: from_dh})
+    end)
 end)
+
+IO.puts("Seeding complete!")
