@@ -23,6 +23,10 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+config :ex_twilio, account_sid:   {:system, "TWILIO_ACCOUNT_SID"},
+  auth_token:    {:system, "TWILIO_AUTH_TOKEN"},
+  workspace_sid: {:system, "TWILIO_WORKSPACE_SID"} #
+
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
