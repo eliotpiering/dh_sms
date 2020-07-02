@@ -1,13 +1,17 @@
 defmodule DhSmsWeb.Webhooks.MessageController do
   use DhSmsWeb, :controller
 
+  alias DhSms.DhSms.Conversations
   alias DhSms.Messaging
   alias DhSms.Messaging.Message
 
   def create(conn, params) do
     IO.inspect(conn, label: "CONN:")
     IO.inspect(params, label: "PARAMS:")
-    # case Messaging.create_message(message_params) do
+
+
+    Conversations.create_message(params)
+    # case Messaging.create_message(params) do
     #   {:ok, message} ->
     #     conn
     #     |> put_flash(:info, "Message created successfully.")

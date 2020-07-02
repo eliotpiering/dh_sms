@@ -47,7 +47,7 @@ defmodule DhSms.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:ex_twilio, "~> 0.8.1"}
+      {:ex_twilio, "~> 0.8.1"},
       {:faker_elixir_octopus, "~> 1.0.0",  only: [:dev, :test]},
       {:tzdata, "~> 1.0.1"},
       {:calendar, "~> 1.0.0"}
