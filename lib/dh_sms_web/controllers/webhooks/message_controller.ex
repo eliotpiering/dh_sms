@@ -1,24 +1,20 @@
 defmodule DhSmsWeb.Webhooks.MessageController do
   use DhSmsWeb, :controller
 
-  alias DhSms.DhSms.Conversations
   alias DhSms.Messaging
   alias DhSms.Messaging.Message
 
   def create(conn, params) do
-    IO.inspect(conn, label: "CONN:")
     IO.inspect(params, label: "PARAMS:")
 
-
-    Conversations.create_message(params)
-    # case Messaging.create_message(params) do
-    #   {:ok, message} ->
-    #     conn
-    #     |> put_flash(:info, "Message created successfully.")
-    #     |> redirect(to: Routes.contact_message_path(conn, :show, contact_id, message))
-    #   {:error, %Ecto.Changeset{} = changeset} ->
-    #     render(conn, "new.html", contact_id: contact_id, changeset: changeset)
-    # end
+    case Messaging.create_message_from_webhook(params) do
+      {:ok, message} ->
+        conn
+        |> put_flash(:info, "Message created successfully.")
+        |> redirect(to: Routes.contact_message_path(conn, :show, message.contact_id, message))
+      {:error, %Ecto.Changeset{} = changeset} ->
+        render(conn, "new.html", contact_id: changeset.contact_id, changeset: changeset)
+    end
     conn
     |> put_status(:created)
     |> html("<Response></Response>")

@@ -9,7 +9,7 @@ defmodule DhSms.Messaging do
     Message
   }
 
-  def list_conversations_with_contacts_and_messages() do
+  def list_with_contacts_and_messages() do
     Repo.all from c in Conversation, preload: [:contact, :messages]
   end
 
@@ -111,6 +111,22 @@ defmodule DhSms.Messaging do
   end
 
   def get_message!(id), do: Repo.get!(Message, id)
+
+  def create_message_from_webhook(%{"Body" => body, "To" => to, "From" => from}) do
+    contact = Repo.get_by(Contact, phone: from)
+    campaign = Repo.get_by(Campaign, phone: to)
+    conversation_id = Repo.get_by(Conversation, contact: contact, campaign: campaign).id
+    
+    attrs = %{
+      body: body,
+      from_dh: false,
+      conversation_id: conversation_id
+    }
+
+    %Message{}
+    |> Message.changeset(attrs)
+    |> Repo.insert()
+  end
 
   def create_message(attrs \\ %{}) do
     %Message{}
