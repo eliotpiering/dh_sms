@@ -19,6 +19,8 @@ defmodule DhSmsWeb.Router do
   scope "/", DhSmsWeb do
     pipe_through :browser
 
+    resources "/campaigns", CampaignController
+
     resources "/conversations", ConversationController do
       resources "/contacts", ContactController
       resources "/messages", MessageController
