@@ -1,13 +1,13 @@
 defmodule DhSmsWeb.PageLive do
   use DhSmsWeb, :live_view
 
-  alias DhSms.Conversations
+  alias DhSms.Messaging
   alias DhSmsWeb.ConversationPresenter
 
   @impl true
   def mount(_params, _session, socket) do
     all_conversations =
-      Conversations.list_with_contacts_and_messages()
+      Messaging.list_conversations_with_contacts_and_messages()
     |> ConversationPresenter.ordered_from_conversation_list()
 
     {:ok,
@@ -59,7 +59,7 @@ defmodule DhSmsWeb.PageLive do
   @impl true
   def handle_event("new_message", %{"contact-id" => contact_id}, socket) do
     conversation_id = socket.assigns.current_conversation.id
-    {:ok, message} = Conversations.create_message(%{body: socket.assigns.chat_message, from_dh: true, conversation_id: conversation_id})
+    {:ok, message} = Messaging.create_message(%{body: socket.assigns.chat_message, from_dh: true, conversation_id: conversation_id})
 
     conversations = ConversationPresenter.add_message_to_conversations(socket.assigns.conversations, message)
     current_conversation = ConversationPresenter.get_by(conversations, socket.assigns.current_conversation.id)
