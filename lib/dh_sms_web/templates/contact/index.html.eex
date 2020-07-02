@@ -18,13 +18,13 @@
       <td><%= contact.phone %></td>
 
       <td>
-        <span><%= link "Show", to: Routes.contact_path(@conn, :show, contact) %></span>
-        <span><%= link "Edit", to: Routes.contact_path(@conn, :edit, contact) %></span>
-        <span><%= link "Delete", to: Routes.contact_path(@conn, :delete, contact), method: :delete, data: [confirm: "Are you sure?"] %></span>
+        <span><%= link "Show", to: Routes.conversation_contact_path(@conn, :show, @conversation_id, contact) %></span>
+        <span><%= link "Edit", to: Routes.conversation_contact_path(@conn, :edit, @conversation_id, contact) %></span>
+        <span><%= link "Delete", to: Routes.conversation_contact_path(@conn, :delete, @conversation_id, contact), method: :delete, data: [confirm: "Are you sure?"] %></span>
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
 
-<span><%= link "New Contact", to: Routes.contact_path(@conn, :new) %></span>
+<span><%= link "New Contact", to: Routes.conversation_contact_path(@conn, :new, @conversation_id) %></span>

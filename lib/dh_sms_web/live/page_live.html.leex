@@ -1,48 +1,46 @@
-<section class="phx-hero">
-  <h1><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h1>
-  <p>Peace-of-mind from prototype to production</p>
-
-  <form phx-change="suggest" phx-submit="search">
-    <input type="text" name="q" value="<%= @query %>" placeholder="Live dependency search" list="results" autocomplete="off"/>
-    <datalist id="results">
-      <%= for {app, _vsn} <- @results do %>
-        <option value="<%= app %>"><%= app %></option>
-      <% end %>
-    </datalist>
-    <button type="submit" phx-disable-with="Searching...">Go to Hexdocs</button>
-  </form>
-</section>
-
-<section class="row">
-  <article class="column">
-    <h2>Resources</h2>
+<section class="row chat-container">
+  <article class="column column-33 conversation-list">
+    <br/>
+    <h2>Conversations</h2>
     <ul>
-      <li>
-        <a href="https://hexdocs.pm/phoenix/overview.html">Guides &amp; Docs</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix">Source</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix/blob/v1.5/CHANGELOG.md">v1.5 Changelog</a>
-      </li>
+      <%= for {_key, conversation} <- @conversations do %>
+        <li class="<%= conversation_mini_class(conversation, @current_conversation.contact_id) %>" phx-click="change_conversation" phx-value-contact-id="<%= conversation.contact_id %>">
+          <label><%= conversation.contact_name %>
+            <%= cond do %>
+              <% conversation.unread_count > 0 -> %>
+                <span class="unread-count"><%= conversation.unread_count %></span>
+              <% true -> %>
+                <span></span>
+            <% end %>
+          </label>
+          <span><%= message_preview(conversation) %></span></br>
+          <label><small><%= formatted_date(conversation.last_sent_datetime) %></small></label>
+        </li>
+        <hr/>
+      <% end %>
     </ul>
   </article>
-  <article class="column">
-    <h2>Help</h2>
-    <ul>
-      <li>
-        <a href="https://elixirforum.com/c/phoenix-forum">Forum</a>
-      </li>
-      <li>
-        <a href="https://webchat.freenode.net/?channels=elixir-lang">#elixir-lang on Freenode IRC</a>
-      </li>
-      <li>
-        <a href="https://twitter.com/elixirphoenix">Twitter @elixirphoenix</a>
-      </li>
-      <li>
-        <a href="https://elixir-slackin.herokuapp.com/">Elixir on Slack</a>
-      </li>
+  <article class="column column-67 current-conversation">
+    <h3 phx-hook="CurrentChat"><%= @current_conversation.contact_name %></h3>
+    <ul >
+      <%= for message <- messages_reverse_order(@current_conversation) do %>
+        <li class="row">
+          <div class="message-bubble column column-40 <%= conversation_message_class(message) %>">
+            <%= message.body %>
+            <br/>
+            <small><%= formatted_date(message.sent_at) %></small>
+          </div>
+        </li>
+      <% end %>
     </ul>
+    <div class="column column-67 chat-input">
+      <%= form_tag "#", [phx_submit: :new_message, phx_change: :update_chat_message] do %>
+        <fieldset>
+          <input type="hidden" name="contact-id" value="<%= @current_conversation.contact_id %>">
+          <textarea name="body" placeholder="Type a new message"><%= @chat_message %></textarea>
+          <%= submit "Send", class: "button-primary", disabled: is_nil(@current_conversation.id) %>
+        </fieldset>
+      <% end %>
+    </div>
   </article>
 </section>
