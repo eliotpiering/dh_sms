@@ -5,7 +5,7 @@ defmodule DhSms.Conversations.Message do
   alias DhSms.Conversations.{Conversation}
 
   schema "messages" do
-    field :body, :text
+    field :body, :string
     field :from_dh, :boolean
 
     belongs_to :conversation, Conversation
