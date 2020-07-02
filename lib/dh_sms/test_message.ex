@@ -9,14 +9,17 @@ defmodule DhSms.TestMessage do
 
   def build_messages(count) do
     1..count
-    |> Enum.map(fn i ->
-      %TestMessage{
-        name: random_name(),
-        body: random_body(),
-        contact_id: i,
-        from_dh: false,
-        sent_at: random_time()
-      }
+    |> Enum.flat_map(fn i ->
+      msg_count = :rand.uniform(10)
+      (0..msg_count) |> Enum.map(fn j ->
+        %TestMessage{
+          name: random_name(),
+          body: random_body(),
+          contact_id: i,
+          from_dh: rem(j, 2) == 0,
+          sent_at: random_time()
+        }
+      end)
     end)
   end
 

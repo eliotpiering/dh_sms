@@ -1,6 +1,6 @@
 defmodule DhSms.Conversation do
   alias __MODULE__
-  defstruct messages: [], contact_id: 0, last_read_datetime: nil, contact_name: nil
+  defstruct messages: [], contact_id: 0, last_read_datetime: nil, contact_name: nil, unread_count: 0
 
   def build_from_messages(messages) do
     messages
@@ -10,7 +10,8 @@ defmodule DhSms.Conversation do
   end
 
   def add_message_to_conversations(conversation_hash, message) do
-    {_, updated_hash} = Map.get_and_update(conversation_hash, message.contact_id, fn existing_con ->
+    key = message.contact_id |> to_string
+    {_, updated_hash} = Map.get_and_update(conversation_hash, key, fn existing_con ->
       updated_con =
         case existing_con do
           nil ->
@@ -33,4 +34,5 @@ defmodule DhSms.Conversation do
     end)
     updated_hash
   end
+
 end
