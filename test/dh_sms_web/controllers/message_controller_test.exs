@@ -3,7 +3,7 @@ defmodule DhSmsWeb.MessageControllerTest do
 
   alias DhSms.Conversations
 
-  @create_attrs %{body: "some body"}
+  @create_attrs %{body: "some body", from_dh: false}
   @update_attrs %{body: "some updated body"}
   @invalid_attrs %{body: nil}
 

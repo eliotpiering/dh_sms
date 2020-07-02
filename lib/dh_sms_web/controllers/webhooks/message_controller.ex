@@ -5,6 +5,7 @@ defmodule DhSmsWeb.Webhooks.MessageController do
   alias DhSms.Messaging.Message
 
   def create(conn, params) do
+    IO.inspect(conn, label: "CONN:")
     IO.inspect(params, label: "PARAMS:")
     # case Messaging.create_message(message_params) do
     #   {:ok, message} ->
