@@ -5,11 +5,6 @@
     </div>
   <% end %>
 
-  <%= label f, :body %>
-  <%= text_input f, :body %>
-  <%= error_tag f, :body %>
-  <%= hidden_input f, :conversation_id %>
-
   <div>
     <%= submit "Save" %>
   </div>
