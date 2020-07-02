@@ -9,7 +9,7 @@ defmodule DhSms.Messaging do
     Message
   }
 
-  def list_with_contacts_and_messages() do
+  def list_conversations_with_contacts_and_messages() do
     Repo.all from c in Conversation, preload: [:contact, :messages]
   end
 
