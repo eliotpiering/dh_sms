@@ -9,8 +9,18 @@ defmodule DhSms.Messaging do
     Message
   }
 
-  def list_with_contacts_and_messages() do
-    Repo.all from c in Conversation, preload: [:contact, :messages]
+  def list_conversations_with_contacts_and_messages() do
+    Repo.all(
+      from c in Conversation,
+        preload: [
+          :contact,
+          messages:
+            ^from(
+              m in Message,
+              order_by: [desc: m.inserted_at]
+            )
+        ]
+    )
   end
 
   def list_campaigns do
