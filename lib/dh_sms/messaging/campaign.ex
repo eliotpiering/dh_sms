@@ -1,11 +1,17 @@
-defmodule DhSms.Campaigns.Campaign do
+defmodule DhSms.Messaging.Campaign do
   use Ecto.Schema
   import Ecto.Changeset
+
+  alias DhSms.Messaging.{Contact, Conversation}
 
   schema "campaigns" do
     field :intro_message, :string
     field :name, :string
     field :send_delay, :integer
+
+    has_many :conversations, Conversation
+
+    many_to_many :contacts, Contact, join_through: "campaigns_contacts"
 
     timestamps()
   end

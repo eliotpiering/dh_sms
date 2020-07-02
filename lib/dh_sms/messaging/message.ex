@@ -1,8 +1,8 @@
-defmodule DhSms.Conversations.Message do
+defmodule DhSms.Messaging.Message do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias DhSms.Conversations.{Conversation}
+  alias DhSms.Messaging.{Conversation}
 
   schema "messages" do
     field :body, :string
