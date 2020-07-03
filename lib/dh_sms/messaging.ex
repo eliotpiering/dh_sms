@@ -136,6 +136,12 @@ defmodule DhSms.Messaging do
     {:ok, message} = create_message(attrs)
   end
 
+  @topic "conversation:lobby"
+  @event :new_msg
+  def send_msg_to_liveview(message) do
+    Phoenix.PubSub.broadcast(DhSms.PubSub, @topic, {@event, message})
+  end
+
   def update_message(%Message{} = message, attrs) do
     message
     |> Message.changeset(attrs)

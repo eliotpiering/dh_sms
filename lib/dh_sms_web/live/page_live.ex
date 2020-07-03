@@ -4,18 +4,31 @@ defmodule DhSmsWeb.PageLive do
   alias DhSms.Messaging
   alias DhSmsWeb.ConversationPresenter
 
+  @topic "conversation:lobby"
+  @event :new_msg
+
   @impl true
   def mount(_params, _session, socket) do
+    if connected?(socket) do
+      Phoenix.PubSub.subscribe(DhSms.PubSub, @topic)
+    end
+
     all_conversations =
       Messaging.list_conversations_with_contacts_and_messages()
-    |> ConversationPresenter.ordered_from_conversation_list()
+      |> ConversationPresenter.ordered_from_conversation_list()
 
     {:ok,
      assign(socket,
        conversations: all_conversations,
        current_conversation: %ConversationPresenter{},
-       chat_message: "",
+       chat_message: ""
      )}
+  end
+
+  def terminate(reason, socket) do
+    Phoenix.PubSub.unsubscribe(DhSms.PubSub, @topic)
+
+    {:ok, socket}
   end
 
   def message_preview(conversation) do
@@ -50,8 +63,6 @@ defmodule DhSmsWeb.PageLive do
     {:noreply, assign(socket, current_conversation: conversation, chat_message: "")}
   end
 
-
-  @impl true
   def handle_event("update_chat_message", %{"body" => body}, socket) do
     {:noreply, assign(socket, chat_message: body)}
   end
@@ -61,11 +72,44 @@ defmodule DhSmsWeb.PageLive do
     conversation = socket.assigns.current_conversation
     conversation_id = conversation.id
     contact_id = conversation.contact_id
-    {:ok, message} = Messaging.create_and_send_message(contact_id, %{body: socket.assigns.chat_message, from_dh: true, conversation_id: conversation_id})
 
-    conversations = ConversationPresenter.add_message_to_conversations(socket.assigns.conversations, message)
-    current_conversation = ConversationPresenter.get_by(conversations, socket.assigns.current_conversation.id)
+    {:ok, message} =
+      Messaging.create_and_send_message(contact_id, %{
+        body: socket.assigns.chat_message,
+        from_dh: true,
+        conversation_id: conversation_id
+      })
 
-    {:noreply, assign(socket, chat_message: "", conversations: conversations, current_conversation: current_conversation)}
+    conversations =
+      ConversationPresenter.add_message_to_conversations(socket.assigns.conversations, message)
+
+    current_conversation =
+      ConversationPresenter.get_by(conversations, socket.assigns.current_conversation.id)
+
+    {:noreply,
+     assign(socket,
+       chat_message: "",
+       conversations: conversations,
+       current_conversation: current_conversation
+     )}
+  end
+
+  @impl true
+  def handle_info({@event, message}, socket) do
+    IO.inspect(socket, label: "SOCK")
+
+    conversations =
+      ConversationPresenter.add_message_to_conversations(socket.assigns.conversations, message)
+
+    IO.inspect(conversations, label: "CONVERSATIONS")
+
+    current_conversation =
+      ConversationPresenter.get_by(conversations, socket.assigns.current_conversation.id)
+
+    {:noreply,
+     assign(socket,
+       conversations: conversations,
+       current_conversation: current_conversation || %ConversationPresenter{}
+     )}
   end
 end
