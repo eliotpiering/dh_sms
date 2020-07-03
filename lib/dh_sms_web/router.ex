@@ -26,6 +26,8 @@ defmodule DhSmsWeb.Router do
       # end
     end
 
+    resources "/contacts", ContactController
+
 
 
     live "/", PageLive, :index
