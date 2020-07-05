@@ -9,12 +9,13 @@ defmodule DhSmsWeb.Webhooks.MessageController do
 
     case Messaging.create_message_from_webhook(params) do
       {:ok, message} ->
-        conn
-        |> put_flash(:info, "Message created successfully.")
-        |> redirect(to: Routes.contact_message_path(conn, :show, message.contact_id, message))
+        Messaging.send_msg_to_liveview(message)
+        # TODO send back accepted resp
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", contact_id: changeset.contact_id, changeset: changeset)
+        IO.inspect(changeset, label: "ERROR")
+        # TODO send back error resp
     end
+
     conn
     |> put_status(:created)
     |> html("<Response></Response>")

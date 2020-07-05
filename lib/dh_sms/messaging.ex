@@ -123,25 +123,37 @@ defmodule DhSms.Messaging do
   def get_message!(id), do: Repo.get!(Message, id)
 
   def create_message_from_webhook(%{"Body" => body, "To" => to, "From" => from}) do
-    contact = Repo.get_by(Contact, phone: from)
-    campaign = Repo.get_by(Campaign, phone: to)
-    conversation_id = Repo.get_by(Conversation, contact: contact, campaign: campaign).id
-    
+    contact_id = Repo.get_by(Contact, phone: from).id
+    campaign_id = Repo.get_by(Campaign, phone: to).id
+    conversation_id = Repo.get_by(Conversation, contact_id: contact_id, campaign_id: campaign_id).id
+
     attrs = %{
       body: body,
       from_dh: false,
       conversation_id: conversation_id
     }
 
-    %Message{}
-    |> Message.changeset(attrs)
-    |> Repo.insert()
+    create_message(attrs)
   end
 
   def create_message(attrs \\ %{}) do
     %Message{}
     |> Message.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def create_and_send_message(contact_id, attrs \\ %{}) do
+    #TODO error catching
+    contact = get_contact!(contact_id)
+    to = contact.phone
+    {:ok, _} = DhSms.Twilio.send_message(to, attrs[:body])
+    {:ok, message} = create_message(attrs)
+  end
+
+  @topic "conversation:lobby"
+  @event :new_msg
+  def send_msg_to_liveview(message) do
+    Phoenix.PubSub.broadcast(DhSms.PubSub, @topic, {@event, message})
   end
 
   def update_message(%Message{} = message, attrs) do
