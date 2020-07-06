@@ -8,7 +8,8 @@
 use Mix.Config
 
 config :dh_sms,
-  ecto_repos: [DhSms.Repo]
+  ecto_repos: [DhSms.Repo],
+  twilio_trial_number: System.fetch_env!("TWILIO_TRIAL_NUMBER")
 
 # Configures the endpoint
 config :dh_sms, DhSmsWeb.Endpoint,
