@@ -2,10 +2,9 @@ defmodule DhSmsWeb.PageLive do
   use DhSmsWeb, :live_view
 
   alias DhSms.Messaging
-  alias DhSmsWeb.ConversationPresenter
+  alias DhSmsWeb.{ConversationPresenter, Endpoint}
 
   @topic "conversation:lobby"
-  @event :new_msg
 
   @impl true
   def mount(_params, _session, socket) do
@@ -86,22 +85,21 @@ defmodule DhSmsWeb.PageLive do
     current_conversation =
       ConversationPresenter.get_by(conversations, socket.assigns.current_conversation.id)
 
-    {:noreply,
-     assign(socket,
-       chat_message: "",
-       conversations: conversations,
-       current_conversation: current_conversation
-     )}
+    new_assigns = %{
+      chat_message: "",
+      conversations: conversations,
+      current_conversation: current_conversation
+    }
+
+    Endpoint.broadcast_from!(self(), @topic, "new_msg", %{message: message})
+
+    {:noreply, assign(socket, new_assigns)}
   end
 
   @impl true
-  def handle_info({@event, message}, socket) do
-    IO.inspect(socket, label: "SOCK")
-
+  def handle_info(%{event: "new_msg", payload: %{message: message} = _payload}, socket) do
     conversations =
       ConversationPresenter.add_message_to_conversations(socket.assigns.conversations, message)
-
-    IO.inspect(conversations, label: "CONVERSATIONS")
 
     current_conversation =
       ConversationPresenter.get_by(conversations, socket.assigns.current_conversation.id)

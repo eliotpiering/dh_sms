@@ -5,8 +5,6 @@ defmodule DhSmsWeb.Webhooks.MessageController do
   alias DhSms.Messaging.Message
 
   def create(conn, params) do
-    IO.inspect(params, label: "PARAMS:")
-
     case Messaging.create_message_from_webhook(params) do
       {:ok, message} ->
         Messaging.send_msg_to_liveview(message)

@@ -1,10 +1,12 @@
 defmodule DhSms.Twilio do
-
-  @twilio_number "+12058519333"
   @base_url "https://api.twilio.com"
 
   def send_message(to, body) do
-    ExTwilio.Message.create([to: to, from: @twilio_number, body: body], ["provideFeedback": true])
+    trial_number = Application.fetch_env!(:dh_sms, :twilio_trial_number)
+    require IEx
+    IEx.pry()
+
+    ExTwilio.Message.create([to: to, from: trial_number, body: body], ["provideFeedback": true])
   end
 
   def list_phone_numbers() do
