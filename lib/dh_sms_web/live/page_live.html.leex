@@ -21,7 +21,8 @@
     </ul>
   </article>
   <article class="column column-67 current-conversation">
-    <h3 phx-hook="CurrentChat"><%= @current_conversation.contact_name %></h3>
+    <p phx-hook="CurrentChat" class="hidden"><%=length(@current_conversation.messages) %></p>
+    <h3 ><%= @current_conversation.contact_name %></h3>
     <ul >
       <%= for message <- messages_reverse_order(@current_conversation) do %>
         <li class="row">
