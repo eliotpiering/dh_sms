@@ -3,8 +3,6 @@ defmodule DhSms.Twilio do
 
   def send_message(to, body) do
     trial_number = Application.fetch_env!(:dh_sms, :twilio_trial_number)
-    require IEx
-    IEx.pry()
 
     ExTwilio.Message.create([to: to, from: trial_number, body: body], ["provideFeedback": true])
   end
