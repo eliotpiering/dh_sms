@@ -8,6 +8,7 @@ defmodule DhSms.Messaging.Campaign do
     field :intro_message, :string
     field :name, :string
     field :send_delay, :integer
+    field :phone, :string
 
     has_many :conversations, Conversation
 
@@ -19,7 +20,7 @@ defmodule DhSms.Messaging.Campaign do
   @doc false
   def changeset(campaign, attrs) do
     campaign
-    |> cast(attrs, [:name, :send_delay, :intro_message])
-    |> validate_required([:name, :send_delay, :intro_message])
+    |> cast(attrs, [:name, :send_delay, :intro_message, :phone])
+    |> validate_required([:name, :send_delay, :intro_message, :phone])
   end
 end

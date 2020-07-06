@@ -20,7 +20,7 @@ defmodule DhSms.MixProject do
   def application do
     [
       mod: {DhSms.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :ex_twilio]
     ]
   end
 
@@ -47,6 +47,7 @@ defmodule DhSms.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
+      {:ex_twilio, "~> 0.8.1"},
       {:faker, "~> 0.13", only: [:dev, :test]},
       {:tzdata, "~> 1.0.1"},
       {:calendar, "~> 1.0.0"}
